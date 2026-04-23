@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { useEffect } from "react"
 import { motion, useScroll, useTransform, AnimatePresence } from 'motion/react';
 import { 
   ResponsiveContainer, 
@@ -1583,3 +1584,32 @@ function VariantSelector({ product, onClose, onAdd }: { product: Product, onClos
     </motion.div>
   );
 }
+
+function App() {
+	const [products, setProducts] = useState<any[]>([])
+  useEffect(() => {
+    fetch("http://localhost:5000/products")
+      .then(res => res.json())
+      .then(data => {
+        console.log("Products:", data)
+	setProducts(data)
+      })
+      .catch(err => console.log(err))
+  }, [])
+
+  return (
+    <div>
+      <h1>Bakery System</h1>
+      <h2>Products</h2>
+
+      {products.map((p: any) => (
+      <div key={p.id}>
+        <h3>{p.name}</h3>
+        <p>₹{p.price}</p>
+      </div>
+    ))}
+    </div>
+  )
+}
+
+export default App
